@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+	
+	<!--4 配置action （也可以使用注解）-->
+<!-- 	<bean id="empAction" class="cn.jboa.action.EmployeeAction">
+		<property name="empService" ref="empService"/>
+		<property name="deptService" ref="deptService"/>
+		<property name="positionService" ref="positionService"/>
+	</bean> -->
+	<bean id="AdminsAction" class="com.painter.web.AdminsAction" scope="prototype">
+		<property name="adminsBiz" ref="adminsBiz"/>
+	</bean>
+	<bean id="UsersAction" class="com.painter.web.UsersAction" scope="prototype">
+	    <property name="usersBiz" ref="usersBiz"></property>
+	</bean>
+
+	<bean id="GoodstypeAction" class="com.painter.web.GoodstypeAction" scope="prototype">
+	    <property name="goodstypeBiz" ref="goodstypeBiz"></property>
+	</bean>
+
+	<bean id="GoodsAction" class="com.painter.web.GoodsAction" scope="prototype">
+	    <property name="goodsBiz" ref="goodsBiz"></property>
+	</bean>
+	<bean id="ContactAction" class="com.painter.web.ContactAction" scope="prototype">
+		<property name="contactBiz" ref="contactBiz"/>
+	</bean>
+	<bean id="DealinfoAction" class="com.painter.web.DealinfoAction" scope="prototype">
+		<property name="dealinfoBiz" ref="dealinfoBiz"/>
+		<property name="usersBiz" ref="usersBiz"></property>
+	</bean>
+	<bean id="PainterAction" class="com.painter.web.PainterAction" scope="prototype">
+		<property name="painterBiz" ref="painterBiz"/>
+		
+	</bean>
+	<bean id="CartAction" class="com.painter.web.CartAction" scope="prototype">
+		<property name="cartBiz" ref="cartBiz"/>
+		<property name="dealinfoBiz" ref="dealinfoBiz"/>
+		<property name="usersBiz" ref="usersBiz"></property>
+	</bean>
+</beans>

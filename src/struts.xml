@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 设置临时文件存储位置 -->
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<!-- 设置上传文件最大值为80M -->
+	<constant name="struts.multipart.maxSize" value="83886080"></constant>
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+
+	<constant name="struts.ui.theme" value="simple" />
+
+	<package name="default" namespace="/" extends="struts-default">
+		<!-- <interceptors> <interceptor name="serviceInterceptor" class="com.painter.interceptor.ServiceInterceptor"></interceptor> 
+			<interceptor-stack name="myStactk"> <interceptor-ref name="serviceInterceptor"></interceptor-ref> 
+			<interceptor-ref name="defaultStack"></interceptor-ref> </interceptor-stack> 
+			</interceptors> -->
+
+
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception"
+				result="error" />
+		</global-exception-mappings>
+	</package>
+
+
+	<package name="admin" namespace="/" extends="json-default">
+		<action name="admin_*" class="com.painter.web.AdminsAction"
+			method="{1}">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="user_getUsersList" class="com.painter.web.UsersAction"
+			method="getUsersList">
+			<result name="success">
+				/admin/userList.jsp
+			</result>
+			<result name="error">
+				/admin/userList.jsp
+			</result>
+		</action>
+		<action name="user_delUser" class="com.painter.web.UsersAction"
+			method="delUser">
+			<result name="success" type="chain">
+				user_getUsersList
+			</result>
+			<result name="error">
+				/admin/login.jsp
+			</result>
+		</action>
+		<action name="user_getUserById" class="com.painter.web.UsersAction"
+			method="getUserById">
+			<result name="success">
+				/admin/updateUser.jsp
+			</result>
+			<result name="error">
+				/admin/login.jsp
+			</result>
+		</action>
+		<action name="user_addUser" class="com.painter.web.UsersAction"
+			method="addUser">
+			<param name="savePath">/upload</param>
+			<result name="success" type="chain">
+				user_getUsersList
+			</result>
+
+		</action>
+		<action name="user_updateUser" class="com.painter.web.UsersAction"
+			method="updateUser">
+			<param name="savePath">/upload</param>
+			<result name="success" type="chain">
+				user_getUsersList
+			</result>
+		</action>
+		<action name="goods_findGoods" class="com.painter.web.GoodsAction"
+			method="findGoods">
+			<result name="success">
+				/painterBg/updateGoods.jsp
+			</result>
+		</action>
+		<action name="goods_addGoods" class="com.painter.web.GoodsAction"
+			method="addGoods">
+			<result name="success" type="chain">
+				goods_findPainterGoods
+			</result>
+		</action>
+		<action name="goods_deleteGoods" class="com.painter.web.GoodsAction"
+			method="deleteGoods">
+			<result name="success" type="chain">
+				goods_findPainterGoods
+			</result>
+		</action>
+		<action name="goods_updateGoods" class="com.painter.web.GoodsAction"
+			method="updateGoods">
+			<result name="success" type="chain">
+				goods_findPainterGoods
+			</result>
+		</action>
+		<action name="goods_getGoodsList" class="com.painter.web.GoodsAction"
+			method="getGoodsList">
+			<result name="success">
+				/admin/goodsList.jsp
+			</result>
+			<result name="error">
+				/admin/goodsList.jsp
+			</result>
+		</action>
+		<action name="goods_findPainterGoods" class="com.painter.web.GoodsAction"
+			method="findPainterGoods">
+			<result name="success">
+				/painterBg/goodsList.jsp
+			</result>
+			<result name="error">
+				/painterBg/goodsList.jsp
+			</result>
+		</action>
+		<action name="goods_getGoodsPicture" class="com.painter.web.GoodsAction"
+			method="getGoodsPicture">
+			<result name="success">
+				/admin/goodsDetails.jsp
+			</result>
+		</action>
+		<action name="goodstype_showgoodstype" class="com.painter.web.GoodstypeAction"
+			method="showgoodstype">
+			<result name="painterlogin" type="redirect">
+				/painterBg/main.jsp
+			</result>
+		</action>
+		<action name="contact_getContactList" class="com.painter.web.ContactAction"
+			method="getContactList">
+			<result name="success">
+				/admin/showcontact.jsp
+			</result>
+			<result name="error">
+				/admin/showcontact.jsp
+			</result>
+		</action>
+		<action name="contact" class="com.painter.web.ContactAction"
+			method="addContact">
+			<result name="success">
+				success.html
+			</result>
+			<result name="error">
+				contact.jsp
+			</result>
+		</action>
+		<action name="dealinfo_getDealinfoList" class="com.painter.web.DealinfoAction"
+			method="getDealinfoList">
+			<result name="success">
+				/admin/dealInfoList.jsp
+			</result>
+			<result name="error">
+				/admin/dealInfoList.jsp
+			</result>
+		</action>
+		<action name="painter_getPainterList" class="com.painter.web.PainterAction"
+			method="getPainterList">
+			<result name="success">
+				/admin/painterList.jsp
+			</result>
+			<result name="error">
+				/admin/painterList.jsp
+			</result>
+		</action>
+		<!-- <action name="painter_painterlogin" class="com.painter.web.PainterAction" 
+			method="painterlogin"> <result name="success"> /admin/painterList.jsp </result> 
+			<result name="error"> /admin/painterList.jsp </result> </action> -->
+		<action name="painter_addPainter" class="com.painter.web.PainterAction"
+			method="addPainter">
+			<result name="success" type="chain">
+				painter_getPainterList
+			</result>
+		</action>
+		<action name="painter_deletePainter" class="com.painter.web.PainterAction"
+			method="deletePainter">
+			<result name="success" type="chain">
+				painter_getPainterList
+			</result>
+		</action>
+		<action name="painter_findPainter" class="com.painter.web.PainterAction"
+			method="findPainter">
+			<result name="success">
+				/admin/updatePainter.jsp
+			</result>
+		</action>
+		<action name="painter_updatePainter" class="com.painter.web.PainterAction"
+			method="updatePainter">
+			<result name="success" type="chain">
+				painter_getPainterList
+			</result>
+		</action>
+		<action name="painter_updatePainterInfo" class="com.painter.web.PainterAction"
+			method="updatePainterInfo">
+			<result name="success">
+				/painterBg/updatePainter.jsp
+			</result>
+		</action>
+	</package>
+
+
+	<package name="users" namespace="/" extends="struts-default">
+		<action name="register" class="com.painter.web.UsersAction"
+			method="reg">
+			<param name="savePath">/upload</param>
+			<result name="success">login.html</result>
+		</action>
+		<action name="tlogin" class="com.painter.web.UsersAction"
+			method="tlogin">
+			<result type="stream">
+				<!--指定stream生成的响应数据的类型 -->
+				<param name="contentType">text/html</param>
+				<!--指定要返回输出的结果 -->
+				<param name=" inputStream"> </param>
+			</result>
+		</action>
+		<action name="login" class="com.painter.web.UsersAction"
+			method="login">
+			<result name="error">login.html</result>
+			<result name="success" type="redirectAction">index</result>
+		</action>
+
+		<action name="checkName" class="com.painter.web.UsersAction"
+			method="checkName">
+			<result type="stream">
+				<!--指定stream生成的响应数据的类型 -->
+				<param name="contentType">text/html</param>
+				<!--指定要返回输出的结果 -->
+				<param name=" inputStream"> </param>
+			</result>
+		</action>
+
+		<action name="index" class="com.painter.web.GoodstypeAction"
+			method="show">
+			<result name="success" type="redirect">index.jsp</result>
+		</action>
+		<action name="showpainter" class="com.painter.web.PainterAction"
+			method="showPainter">
+			<result name="success" type="redirect">painter.jsp</result>
+		</action>
+
+		<action name="Service" class="com.painter.web.GoodsAction"
+			method="service">
+			<result name="success">service.jsp</result>
+		</action>
+		<action name="Goodsinfo" class="com.painter.web.GoodsAction"
+			method="showGoodsInfo">
+			<result name="success">goodsinfo.jsp</result>
+		</action>
+		<action name="showDealinfo" class="com.painter.web.DealinfoAction"
+			method="showDealinfo">
+			<result name="success">recharge.jsp</result>
+		</action>
+		<action name="Dealinfo" class="com.painter.web.DealinfoAction"
+			method="save">
+			<result name="success">success.html</result>
+			<result name="error">fail.html</result>
+		</action>
+		<action name="addMoney" class="com.painter.web.UsersAction"
+			method="addMoney">
+			<result name="success">success.html</result>
+			<result name="error">fail.html</result>
+		</action>
+		<action name="relogin" class="com.painter.web.UsersAction"
+			method="relogin">
+			<result name="success">login.html</result>
+
+		</action>
+		<action name="UpdateUser" class="com.painter.web.UsersAction"
+			method="flushUsers">
+			<result name="success">login.html</result>
+			<result name="error" type="redirect">index.jsp</result>
+		</action>
+		<action name="addCart" class="com.painter.web.CartAction"
+			method="addCart">
+			<result type="stream">
+				<!--指定stream生成的响应数据的类型 -->
+				<param name="contentType">text/html</param>
+				<!--指定要返回输出的结果 -->
+				<param name=" inputStream"> </param>
+			</result>
+		</action>
+		<action name="referCart" class="com.painter.web.CartAction" method="referCart">
+			<result type="stream">
+				<!--指定stream生成的响应数据的类型 -->
+				<param name="contentType">text/html</param>
+				<!--指定要返回输出的结果 -->
+				<param name=" inputStream"> </param>
+			</result>
+		</action>
+		<action name="delCart" class="com.painter.web.CartAction" method="delCart">
+			<result type="stream">
+				<!--指定stream生成的响应数据的类型 -->
+				<param name="contentType">text/html</param>
+				<!--指定要返回输出的结果 -->
+				<param name=" inputStream"> </param>
+			</result>
+		</action>
+		<action name="cart"  class="com.painter.web.CartAction" method="showCartList">
+			<result name="success">cart.jsp</result>
+			
+		</action>
+	</package>
+
+
+	<package name="painter" namespace="/" extends="json-default">
+		<action name="painter_*" class="com.painter.web.PainterAction"
+			method="{1}">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+	</package>
+
+</struts>
+
+ 

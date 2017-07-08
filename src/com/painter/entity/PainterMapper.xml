@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.painter.dao.IPainterDao">
+
+	<resultMap type="Painter" id="painterResultMap">
+		<id property="painterid" column="painterid" />
+		<result property="name" column="name" />
+		<result property="pwd" column="pwd" />
+		<result property="money" column="money" />
+		<result property="score" column="score" />
+		<result property="img" column="img" />
+		<result property="hiredate" column="hiredate" />
+		<result property="intro" column="intro" />
+
+	</resultMap>
+	<select id="findAllPainter" resultMap="painterResultMap">
+		select * from painter
+	</select>
+	
+	<select id="findPainterByName" parameterType="Painter" resultMap="painterResultMap">
+	    select * from painter where name = #{name}
+	</select>
+
+	<select id="findPainterList" parameterType="Condition"
+		resultMap="painterResultMap">
+		select * from (select rownum as num,p.* from painter p
+		where rownum <![CDATA[ < ]]>=#{pageIndex}
+		* #{pageSize} order by painterid) t
+		where t.num> (#{pageIndex}-1)*#{pageSize}
+	</select>
+
+	<select id="findPainterRecordCount" parameterType="Condition"
+		resultType="int">
+		select count(*) from painter
+	</select>
+
+	<select id="findPainterByLogin" parameterType="Painter"
+		resultMap="painterResultMap">
+		select * from painter where name=#{name} and pwd=#{pwd}
+	</select>
+
+
+	<sql id='TABLE_NAME'>painter</sql>
+	<sql id='TABLE_SEQUENCE'>SEQ_PAINTER.nextval</sql>
+	<insert id="addPainter" parameterType="Painter">
+		<selectKey keyProperty="painterid" resultType="int" order="BEFORE">
+			select
+			<include refid="TABLE_SEQUENCE" />
+			from dual
+		</selectKey>
+		insert into
+		<include refid="TABLE_NAME" />
+		<if test="img!=null">
+   		   (painterid,name,pwd,img,intro)
+		   values(#{painterid},#{name},#{pwd},#{img},#{intro})
+		</if>
+        <if test="img==null">
+    	   (painterid,name,pwd,intro)
+		   values(#{painterid},#{name},#{pwd},#{intro})
+        </if>
+	</insert>
+	
+	<delete id="delPainterById" parameterType="Painter">
+		delete from painter where painterid = #{painterid}
+	</delete>
+	
+	<update id="updatePainterById" parameterType="Painter">
+		update painter
+		<set>
+			<if test="pwd!=null">pwd = #{pwd},</if>
+			<if test="money!=null">money = #{money},</if>
+			<if test="score!=null">score = #{score},</if>
+			<if test="img!=null">img = #{img},</if>
+			<if test="intro!=null">intro = #{intro},</if>
+		</set>
+		<where>
+			painterid = #{painterid}
+		</where>
+	</update>
+    <select id="findPainterById" parameterType="Painter" resultMap="painterResultMap">
+        select * from painter where painterid = #{painterid}
+    </select>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="Admins" type="com.painter.entity.Admins"/>
+		<typeAlias alias="Cart" type="com.painter.entity.Cart"/>
+		<typeAlias alias="Contact" type="com.painter.entity.Contact"/>
+		<typeAlias alias="Dealinfo" type="com.painter.entity.Dealinfo"/>
+		<typeAlias alias="Goods" type="com.painter.entity.Goods"/>
+		<typeAlias alias="Goodstype"  type="com.painter.entity.Goodstype"/>
+		<typeAlias alias="Painter"  type="com.painter.entity.Painter"/>
+		<typeAlias alias="Users"  type="com.painter.entity.Users"/>
+		<typeAlias alias="Condition" type="com.painter.util.Condition"/>
+		<typeAlias alias="Page" type="com.painter.util.Page"/>
+	</typeAliases>
+	<mappers>
+		<!--         根据下面的例子引入每个映射文件
+		<mapper resource="cn/jboa/dao/EmployeeMapper.xml"/> -->
+		<mapper resource="com/painter/entity/GoodsMapper.xml"/>
+		<mapper resource="com/painter/entity/GoodstypeMapper.xml"/>
+		<mapper resource="com/painter/entity/AdminsMapper.xml"/>
+		<mapper resource="com/painter/entity/CartMapper.xml"/>
+		<mapper resource="com/painter/entity/ContactMapper.xml"/>
+		<mapper resource="com/painter/entity/DealinfoMapper.xml"/>
+		<mapper resource="com/painter/entity/PainterMapper.xml"/>
+		<mapper resource="com/painter/entity/UsersMapper.xml"/>
+		
+	</mappers>
+	
+	
+</configuration>

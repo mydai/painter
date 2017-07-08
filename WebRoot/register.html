@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>register</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="description" content="Expand, contract, animate forms with jQuery wihtout leaving the page" />
+        <meta name="keywords" content="expand, form, css3, jquery, animate, width, height, adapt, unobtrusive javascript"/>
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon"/>
+        <link rel="stylesheet" type="text/css" href="css/lstyle.css" />
+        <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="layer/layer.js"></script>
+		<script type="text/javascript">
+			Cufon.replace('h1',{ textShadow: '1px 1px #fff'});
+			Cufon.replace('h2',{ textShadow: '1px 1px #fff'});
+			Cufon.replace('h3',{ textShadow: '1px 1px #000'});
+			var reg=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			function checkname(){
+				var name=$("#uname").val();
+				if(name==""){
+					layer.tips("用户名不能为空", "#uname");
+				}else{
+					$.post("checkName",{"user.name": name},function(data){ 
+						   layer.tips(data, "#uname");
+						 })
+				}	
+			}
+			function checkpwd(){
+				
+				var pwd=$("#pwd").val();
+				if(pwd==""){
+					layer.tips("密码不能为空", "#pwd");
+				}
+			}
+			
+			function checkemail(){
+				
+				var email=$("#email").val();
+				if(!email.match(reg)){
+					layer.tips("邮箱格式不正确", "#email");
+				}
+				
+			}
+			
+			
+		</script>
+		<style type="text/css">
+			body{
+			margin-top:80px;
+			}
+		</style>
+    </head>
+    <body>
+		<div class="wrapper">
+			<h1>IT'S NICE TO MEET YOU</h1>
+			<h2>欢迎来到 <span>画美人</span></h2>
+			<div class="content">
+				<div id="form_wrapper" class="form_wrapper" >
+					<form class="register active" method="post" action="register" enctype="multipart/form-data">
+						<h3>请注册：</h3>
+						
+							<div>
+								<label>用户名:</label>
+								<input type="text" name="user.name" id="uname" onblur="checkname()"/>
+								
+							</div>
+							<div>
+								<label>密码:</label>
+								<input type="password" name="user.pwd" id="pwd" onblur="checkpwd()"/>
+								
+							</div>
+							<div>
+								<label>邮箱:</label>
+								<input type="text" name="user.email" id="email" onblur="checkemail()"/>
+								
+							</div>
+							<div>
+								<label>请选择头像:</label>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" name="upload"/>
+								
+							</div>
+						
+						<div class="bottom">
+							<div class="remember">
+								<input type="checkbox" />
+								<span>发送邮件</span>
+							</div>
+							<input type="submit" value="注册" />
+							<a href="login.html" rel="login" class="linkform">点击登录</a>
+							<div class="clear"></div>
+						</div>
+					</form>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+		
+    </body>
+</html>

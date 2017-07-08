@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>login</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="description" content="Expand, contract, animate forms with jQuery wihtout leaving the page" />
+        <meta name="keywords" content="expand, form, css3, jquery, animate, width, height, adapt, unobtrusive javascript"/>
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon"/>
+        <link rel="stylesheet" type="text/css" href="css/lstyle.css" />
+		<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="layer/layer.js"></script>
+		<script type="text/javascript">
+			Cufon.replace('h1',{ textShadow: '1px 1px #fff'});
+			Cufon.replace('h2',{ textShadow: '1px 1px #fff'});
+			Cufon.replace('h3',{ textShadow: '1px 1px #000'});
+			
+			function check(){
+				var name=$("#uname").val();
+				var pwd=$("#pwd").val();
+				if(name==""||pwd==""){
+					layer.tips("请输入用户名密码", "#uname");
+				}else{
+					$.post("tlogin",{"user.name": name,"user.pwd":pwd},function(data){ 
+						   layer.tips(data, "#uname");
+						 });
+				}	
+			}
+			function checkyzm(){
+				var yzm=$("#yzm").val();
+				
+				if(yzm==""){
+					layer.tips("验证码不能为空", "#yzm");
+				}else{
+					$.post("tlogin",{"yzm":yzm},function(data){ 
+						   layer.tips(data, "#yzm");
+						 });
+				}	
+			}
+			
+		</script>
+		<style type="text/css">
+			body{
+			margin-top:80px;
+			}
+		</style>
+    </head>
+    <body>
+		<div class="wrapper">
+			<h1>IT'S NICE TO MEET YOU</h1>
+			<h2>欢迎来到 <span>画美人</span></h2>
+			<br/><br/><br/>
+			<div class="content">
+				<div id="form_wrapper" class="form_wrapper" >
+					<form class="login active" method="post" action="login">
+						<h3>登录</h3>
+						<div>
+							<label>用户名:</label>
+							<input type="text" name="user.name" id="uname"/>
+							
+						</div>
+						<div>
+							<label>密码: <a href="forgot_password.html" rel="forgot_password" class="forgot linkform">忘记密码?</a></label>
+							<input type="password" name="user.pwd" id="pwd" onblur="check()"/>
+							
+						</div>
+						<div>
+							<label>验证码：</label>
+							<input type="text" name="yzm" id="yzm" onblur="checkyzm()"/>
+							<div style="margin: 10px 30px;"><img src="image.jsp" title="点击刷新" onclick="src='image.jsp?'+Math.random()" >
+							<span>点击图片刷新</span></div>
+						</div>
+						
+						<div class="bottom">
+							<div class="remember"><input type="checkbox" /><span>记住密码</span></div>
+							<input type="submit" value="登录" />
+							<a href="register.html" rel="register" class="linkform">点击注册join us</a>
+							<a href="admin/login.jsp" rel="adminlogin" class="linkform">点击后台登录</a>
+							<div class="clear"></div>
+						</div>
+					</form>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+
+		
+    </body>
+</html>

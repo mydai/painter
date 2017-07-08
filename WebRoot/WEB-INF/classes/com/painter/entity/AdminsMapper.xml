@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.painter.dao.IAdminsDao">
+<resultMap type="Admins" id="adminResultMap">
+   <id property="adminsid" column="adminsid"/>
+   <result property="name" column="name"/>
+   <result property="pwd" column="pwd"/>
+</resultMap>
+<select id="findAdmins" parameterType="Admins" resultMap="adminResultMap">
+   <!-- select u.*,m.* from buser u,bmsg m where u.bname=#{bname} and u.bpass=#{bpass} and u.bid=m.mbid -->
+    select * from admins where name=#{name} and pwd=#{pwd}
+</select>
+
+<update id="updateAdmins" parameterType="hashmap">
+    update admins set pwd = #{pwd} where adminsid = #{adminsid}
+</update>
+
+</mapper>

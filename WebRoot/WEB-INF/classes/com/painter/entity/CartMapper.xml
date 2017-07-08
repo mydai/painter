@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.painter.dao.ICartDao">
+	<resultMap type="Cart" id="cartResultMap">
+		<id property="cartid" column="cartid"/>
+		<result property="goodsnum" column="goodsnum" />
+		<association property="goods" javaType="Goods">
+			<id property="goodsid" column="goodsid"/>
+			<result property="img" column="img" />
+			<result property="price" column="price" />
+			<result property="score" column="score" />
+			<association property="painter" javaType="Painter">
+				<id property="painterid" column="painterid"/>
+				<result property="name" column="pname" />
+			</association>
+		</association>	
+		<association property="users" javaType="Users">
+			<id property="userid" column="userid"/>
+		</association>
+ 	</resultMap>
+ 	<select id="findCartByUserid" parameterType="int" resultMap="cartResultMap">
+ 		select c.*,g.*,p.painterid,p.name  as pname
+     from cart c, goods g , painter p where g.painterid=p.painterid
+     and c.goodsid=g.goodsid and c.userid=#{userid} order by cartid desc
+ 	</select>
+ 	<select id="findCartByGoodsid" parameterType="Cart" resultMap="cartResultMap">
+ 		select * from cart where goodsid=#{goods.goodsid}
+ 	</select>
+ 	
+ 	<delete id="delCartByCartid" parameterType="Cart">
+ 		delete from cart where cartid=#{cartid}
+ 	</delete>
+ 	<update id="updateCartGoodsnum"  parameterType="Cart">
+ 		update cart <set>
+ 			goodsnum=#{goodsnum}
+ 		</set>
+ 	</update>
+ 	
+ 	<sql id='TABLE_NAME'>cart</sql>
+ 	<sql id='TABLE_SEQUENCE'>SEQ_cart.nextval</sql>
+	<insert id="addCart" parameterType="Cart">
+     <selectKey keyProperty="cartid" resultType="int" order="BEFORE">
+         select <include refid="TABLE_SEQUENCE" /> from dual
+     </selectKey>
+     insert into <include refid="TABLE_NAME" /> (cartid,goodsid,userid,goodsnum)
+         values ( #{cartid}, #{goods.goodsid}, #{users.userid}, #{goodsnum})
+	</insert>
+</mapper>

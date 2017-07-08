@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.painter.dao.IGoodsDao">
+
+	<resultMap type="com.painter.entity.Goods" id="goodsResultMap">
+		<id property="goodsid" column="goodsid" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="score" column="score" />
+		<result property="img" column="img" />
+		<result property="salnum" column="salnum" />
+		<association property="goodstype" javaType="Goodstype">
+			<id property="typeid" column="typeid" />
+			<result property="name" column="gname" />
+		</association>
+		<association property="painter" javaType="Painter">
+			<id property="painterid" column="painterid" />
+			<result property="name" column="pname" />
+		</association>
+	</resultMap>
+
+	<resultMap type="com.painter.entity.Goods" id="goodsResultMaptwo">
+		<id property="goodsid" column="goodsid" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="score" column="score" />
+		<result property="img" column="img" />
+		<result property="salnum" column="salnum" />
+		<association property="goodstype" javaType="Goodstype">
+			<id property="typeid" column="typeid" />
+			<result property="name" column="gname" />
+		</association>
+	</resultMap>
+
+	<select id="findGoodsList" parameterType="Condition" resultMap="goodsResultMap">
+		select b.*,g.name as gname,p.name as pname from (select * from(select
+		rownum as num,d.* from goods d
+		where rownum <![CDATA[ < ]]>=#{pageIndex}
+		* #{pageSize} order by goodsid) t
+		where t.num>
+		(#{pageIndex}-1)*#{pageSize}) b , goodstype g ,painter p
+		where
+		b.typeid=g.typeid and b.painterid=p.painterid
+	</select>
+
+	<select id="findGoodsRecordCount" parameterType="Condition"
+		resultType="int">
+		select count(*) from goods
+		<where>
+			<if test="typeid!=0">and #{typeid }=typeid
+			</if>
+		</where>
+		<where>
+			<if test="painterid!=0">and #{painterid}=painterid
+			</if>
+		</where>
+	</select>
+
+	<select id="findPageGoodsByTypeid" parameterType="Page"
+		resultMap="goodsResultMap">
+	    <![CDATA[select * from (select rownum as num,g.*,p.name as pname 
+	    from goods g left join painter p on g.painterid=p.painterid where rownum
+	     <= #{pageIndex} * #{pageSize} and #{typeid}=g.typeid
+	      order by g.goodsid) t where t.num> (#{pageIndex}-1)*#{pageSize}]]>
+	</select>
+	<select id="findGoodsByGoodsid" parameterType="Goods" resultMap="goodsResultMap">
+		select g.*,p.painterid,p.name as pname from goods g left join painter
+		p on g.painterid=p.painterid
+		where #{goodsid}=g.goodsid
+	</select>
+
+	<select id="findGoodsListByPainterid" parameterType="Condition"
+		resultMap="goodsResultMaptwo">
+		select b.* from
+		(select rownum as num,t.* from
+		(select d.*,g.name as
+		gname from goods d,goodstype g
+		where d.painterid = #{painterid} and
+		d.typeid=g.typeid) t
+		where rownum <![CDATA[<]]>=#{pageIndex}
+		* #{pageSize} ) b
+		where b.num> (#{pageIndex}-1)*#{pageSize} order by
+		b.goodsid
+	</select>
+
+	<sql id='TABLE_NAME'>goods</sql>
+	<sql id='TABLE_SEQUENCE'>SEQ_GOODS.nextval</sql>
+	<insert id="addGoods" parameterType="Goods">
+		<selectKey keyProperty="goodsid" resultType="int" order="BEFORE">
+			select
+			<include refid="TABLE_SEQUENCE" />
+			from dual
+		</selectKey>
+		<if test="img!=null">
+			insert into
+			<include refid="TABLE_NAME" />
+			(goodsid,typeid,painterid,name,price,score,img)
+			values
+			(#{goodsid},#{goodstype.typeid},#{painter.painterid},#{name},#{price},#{score},#{img})
+		</if>
+		<if test="img==null">
+			insert into
+			<include refid="TABLE_NAME" />
+			(goodsid,typeid,painterid,name,price,score)
+			values
+			(#{goodsid},#{goodstype.typeid},#{painter.painterid},#{name},#{price},#{score})
+		</if>
+
+	</insert>
+
+	<delete id="delGoodsById" parameterType="Goods">
+		delete from goods where
+		goodsid = #{goodsid}
+	</delete>
+
+	<update id="updateGoodsById" parameterType="Goods">
+		update goods
+		<set>
+			<if test="goodstype.typeid!=null">typeid = #{goodstype.typeid},</if>
+			<if test="name!=null">name = #{name},</if>
+			<if test="price!=null">price = #{price},</if>
+			<if test="score!=null">score = #{score},</if>
+			<if test="img!=null">img = #{img},</if>
+		</set>
+		<where>
+			goodsid = #{goodsid}
+		</where>
+	</update>
+
+</mapper>

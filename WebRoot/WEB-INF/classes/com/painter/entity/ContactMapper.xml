@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.painter.dao.IContactDao">
+<resultMap type="Contact" id="contactResultMap">
+	    <id property="contactid" column="contactid"/>
+		<result property="name" column="name" />
+		<result property="tel" column="tel" />
+		<result property="email" column="email"/>
+		<result property="message" column="message"/>
+		<association property="users" javaType="Users">
+		</association>
+</resultMap>
+   	<select id="findContactList" parameterType="Condition" resultMap="contactResultMap">
+       select * from (select rownum as num,c.* from contact c where rownum <![CDATA[ < ]]>=#{pageIndex} * #{pageSize} order by contactid) t where t.num> (#{pageIndex}-1)*#{pageSize}     
+	</select>
+	
+	<select id="findContactRecordCount" parameterType="Condition" resultType="int">
+	   select count(*) from contact
+	</select>
+	
+	<sql id='TABLE_NAME'>contact</sql>
+ 	<sql id='TABLE_SEQUENCE'>SEQ_contact.nextval</sql>
+	<insert id="addContact" parameterType="Contact">
+     <selectKey keyProperty="contactid" resultType="int" order="BEFORE">
+         select <include refid="TABLE_SEQUENCE" /> from dual
+     </selectKey>
+     insert into <include refid="TABLE_NAME" /> (contactid,NAME,tel,email,message,userid)
+         values ( #{contactid}, #{name}, #{tel}, #{email}, #{message},#{users.userid})
+	</insert>
+</mapper>
